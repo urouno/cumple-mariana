@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Todavía estoy aquí</title>
+
+<!-- ==========================================================
+     PARA EDITAR: busca la palabra EDITA (aparece 2 veces).
+     Lo demás lo puedes dejar tal cual.
+     ========================================================== -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;1,6..72,200;1,6..72,300&family=Josefin+Sans:wght@200;300&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --noche:#0b0f15;
+    --profundo:#111925;
+    --vela:#f5eee3;
+    --brasa:#c9885a;
+    --laton:#a98455;
+    --tenue:rgba(245,238,227,.32);
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+
+  body{
+    background:var(--noche);
+    color:var(--vela);
+    font-family:'Newsreader', Georgia, serif;
+    font-weight:200;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:52px 30px calc(72px + env(safe-area-inset-bottom));
+    overflow:hidden;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+    user-select:none;
+  }
+
+  /* ---------- capas de ambiente ---------- */
+
+  .capa{ position:fixed; inset:0; pointer-events:none; }
+
+  .halo{
+    left:50%; top:46%; inset:auto;
+    width:160vmax; height:160vmax;
+    transform:translate(-50%,-50%);
+    background:
+      radial-gradient(circle, rgba(201,136,90,.17) 0%, rgba(17,25,37,.55) 36%, transparent 64%);
+    animation:respirar 13s ease-in-out infinite;
+  }
+  @keyframes respirar{
+    0%,100%{ opacity:.5;  transform:translate(-50%,-50%) scale(1); }
+    50%    { opacity:.95; transform:translate(-50%,-50%) scale(1.08); }
+  }
+
+  .estrella{
+    position:absolute;
+    border-radius:50%;
+    background:var(--vela);
+    animation:titilar 6s ease-in-out infinite;
+  }
+  @keyframes titilar{
+    0%,100%{ opacity:.10; }
+    50%    { opacity:.55; }
+  }
+
+  .grano{
+    opacity:.055;
+    mix-blend-mode:soft-light;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+  }
+
+  .vineta{
+    background:radial-gradient(115% 85% at 50% 45%, transparent 42%, rgba(0,0,0,.72) 100%);
+  }
+
+  /* ---------- marco de latón ---------- */
+
+  .marco{
+    inset:16px;
+    border:1px solid rgba(169,132,85,.22);
+    border-radius:2px;
+  }
+  .esquina{
+    position:absolute;
+    width:16px; height:16px;
+    border:1px solid rgba(169,132,85,.55);
+  }
+  .esquina.a{ top:-1px; left:-1px;  border-right:0; border-bottom:0; }
+  .esquina.b{ top:-1px; right:-1px; border-left:0;  border-bottom:0; }
+  .esquina.c{ bottom:-1px; left:-1px;  border-right:0; border-top:0; }
+  .esquina.d{ bottom:-1px; right:-1px; border-left:0;  border-top:0; }
+
+  /* ---------- contenido ---------- */
+
+  .centro{
+    position:relative;
+    width:100%;
+    max-width:430px;
+    min-height:58dvh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    z-index:2;
+  }
+
+  .bloque{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:22px;
+    width:100%;
+  }
+
+  .etiqueta{
+    font-family:'Josefin Sans', sans-serif;
+    font-weight:200;
+    font-size:10.5px;
+    letter-spacing:.46em;
+    text-indent:.46em;
+    color:var(--laton);
+    opacity:0;
+    animation:surgir 1.3s ease .15s both;
+  }
+
+  .adorno{
+    display:flex; align-items:center; gap:9px;
+    opacity:0;
+    animation:surgir 1.4s ease .3s both;
+  }
+  .adorno i{
+    display:block; width:34px; height:1px;
+    background:linear-gradient(90deg, transparent, rgba(169,132,85,.6));
+  }
+  .adorno i:last-child{
+    background:linear-gradient(90deg, rgba(169,132,85,.6), transparent);
+  }
+  .adorno b{
+    display:block; width:4px; height:4px;
+    background:var(--laton);
+    transform:rotate(45deg);
+  }
+
+  .frase{
+    font-size:clamp(25px, 6.9vw, 35px);
+    font-style:italic;
+    line-height:1.5;
+    max-width:20ch;
+  }
+
+  .nota{
+    font-size:clamp(19px, 5.1vw, 24px);
+    font-weight:300;
+    line-height:1.66;
+    max-width:26ch;
+    color:rgba(245,238,227,.93);
+  }
+
+  .palabra{
+    display:inline-block;
+    opacity:0;
+    filter:blur(6px);
+    transform:translateY(7px);
+    animation:llegar .9s cubic-bezier(.2,.7,.3,1) both;
+  }
+  @keyframes llegar{
+    to{ opacity:1; filter:blur(0); transform:translateY(0); }
+  }
+
+  .firma{
+    font-size:15px;
+    font-style:italic;
+    color:var(--tenue);
+    opacity:0;
+    animation:surgir 1.6s ease .9s both;
+  }
+
+  /* ---------- fotos ---------- */
+
+  .lienzo{
+    position:relative;
+    width:100%;
+    max-width:330px;
+    padding:9px;
+    border:1px solid rgba(169,132,85,.3);
+    border-radius:2px;
+    box-shadow:0 30px 70px rgba(0,0,0,.65);
+    opacity:0;
+    animation:surgir 1.5s ease .1s both;
+  }
+  .lienzo::after{
+    content:"";
+    position:absolute; inset:9px;
+    background:linear-gradient(150deg, rgba(201,136,90,.16), transparent 46%);
+    pointer-events:none;
+  }
+  .lienzo img{
+    display:block;
+    width:100%;
+    aspect-ratio:4/5;
+    object-fit:cover;
+    background:#161f2b;
+    animation:acercar 15s ease-out both;
+  }
+  @keyframes acercar{
+    from{ transform:scale(1); }
+    to  { transform:scale(1.07); }
+  }
+
+  .pie-foto{
+    font-size:16px;
+    font-style:italic;
+    color:var(--tenue);
+    max-width:24ch;
+    line-height:1.5;
+    opacity:0;
+    animation:surgir 1.5s ease .7s both;
+  }
+
+  @keyframes surgir{ to{ opacity:1; } }
+
+  /* ---------- invitación ---------- */
+
+  .pie{
+    position:fixed;
+    left:0; right:0;
+    bottom:calc(30px + env(safe-area-inset-bottom));
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    font-size:14px;
+    font-style:italic;
+    color:var(--tenue);
+    transition:opacity 1.6s ease;
+    pointer-events:none;
+    z-index:2;
+  }
+  .pulso{
+    width:5px; height:5px; border-radius:50%;
+    background:var(--brasa);
+    animation:latir 2.4s ease-in-out infinite;
+  }
+  @keyframes latir{
+    0%,100%{ opacity:.25; transform:scale(1); }
+    50%    { opacity:.9;  transform:scale(1.5); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .halo,.estrella,.pulso{ animation:none; }
+    .palabra,.lienzo,.etiqueta,.adorno,.firma,.pie-foto{ animation:none; opacity:1; filter:none; transform:none; }
+    .lienzo img{ animation:none; }
+  }
+</style>
+</head>
+
+<body onclick="mostrar()">
+
+<div class="capa halo"></div>
+<div class="capa" id="cielo"></div>
+<div class="capa vineta"></div>
+<div class="capa grano"></div>
+<div class="capa marco">
+  <span class="esquina a"></span><span class="esquina b"></span>
+  <span class="esquina c"></span><span class="esquina d"></span>
+</div>
+
+<div class="centro"><div id="centro"></div></div>
+
+<p class="pie" id="pie"><span class="pulso"></span><span id="invitacion"></span></p>
+
+<script>
+/* ============================================================
+   EDITA 1 — todo lo que le puede aparecer.
+
+   Formatos:
+     { tipo:"frase", texto:"..." }
+     { tipo:"nota",  texto:"..." }
+     { tipo:"foto",  archivo:"fotos/foto1.jpg" }
+     { tipo:"foto",  archivo:"fotos/foto2.jpg", pie:"texto opcional" }
+
+   Opcional en cualquiera:
+     momento:"noche"   -> solo aparece entre 10 pm y 5 am
+     etiqueta:"lo que sea"  -> cambia el texto chiquito de arriba
+   ============================================================ */
+
+const cosas = [
+
+  /* --- frases --- */
+  { tipo:"frase", texto:"Mi lugar favorito siempre será donde estés tú." },
+  { tipo:"frase", texto:"Ojalá la vida nos siga encontrando, una y otra vez, en cada etapa." },
+  { tipo:"frase", texto:"Te elegiría incluso en todas las versiones de esta vida que no llegaremos a conocer." },
+  { tipo:"frase", texto:"Entre todas las páginas que me quedan por vivir, espero que muchas incluyan tu nombre." },
+  { tipo:"frase", texto:"Tres años después, sigues siendo una de mis partes favoritas de todos mis días." },
+
+  /* --- notas: aquí es donde de verdad le hablas --- */
+  { tipo:"nota", texto:"Si abriste esto es porque me extrañas. Yo también, todo el tiempo. Falta menos de lo que crees para vernos." },
+  { tipo:"nota", texto:"Si hoy fue un día horrible: no tienes que resolverlo hoy. Solo termínalo. Mañana lo vemos juntos." },
+  { tipo:"nota", texto:"Recuerda que eres mucho más de lo que estás sintiendo en este momento." },
+  { tipo:"nota", texto:"No sé qué te trajo aquí, pero sea lo que sea, no lo estás cargando sola." },
+  { tipo:"nota", texto:"Puedes hablarme. A la hora que sea. No hay nada que me estés interrumpiendo." },
+
+  /* --- solo de madrugada --- */
+  { tipo:"nota", momento:"noche", etiqueta:"es tarde", texto:"¿Otra vez sin dormir? Respira. Nada de lo que estás pensando a esta hora es tan grande como parece." },
+  { tipo:"nota", momento:"noche", etiqueta:"es tarde", texto:"Es tarde y estás despierta. Escríbeme si necesitas, y si no, cierra los ojos: aquí sigo." },
+
+  /* --- fotos --- */
+  { tipo:"foto", archivo:"fotos/foto1.jpg" },
+  { tipo:"foto", archivo:"fotos/foto2.jpg", pie:"este día me acuerdo bien" },
+  { tipo:"foto", archivo:"fotos/foto3.jpg" },
+  { tipo:"foto", archivo:"fotos/foto4.jpg" },
+  { tipo:"foto", archivo:"fotos/foto5.jpg" },
+  { tipo:"foto", archivo:"fotos/foto6.jpg" },
+  { tipo:"foto", archivo:"fotos/foto7.jpg" },
+  { tipo:"foto", archivo:"fotos/foto8.jpg" }
+
+];
+
+/* ============================================================
+   EDITA 2 — textos fijos.
+   ============================================================ */
+
+const ajustes = {
+  invitacion: "toca donde sea",
+  firma: "— siempre, Arturo",     // aparece debajo de las notas. Déjalo vacío ("") si no lo quieres.
+  etiquetaFrase: "todavía estoy aquí",
+  etiquetaNota:  "para ti",
+  etiquetaFoto:  "nosotros"
+};
+
+/* ---------- de aquí para abajo no hace falta cambiar nada ---------- */
+
+const centro = document.getElementById("centro");
+const pie = document.getElementById("pie");
+document.getElementById("invitacion").textContent = ajustes.invitacion;
+
+/* cielo */
+(function(){
+  const cielo = document.getElementById("cielo");
+  let html = "";
+  for (let n = 0; n < 46; n++){
+    const t = (Math.random() * 1.7 + .7).toFixed(2);
+    html += '<span class="estrella" style="' +
+            'left:' + (Math.random()*100).toFixed(1) + '%;' +
+            'top:'  + (Math.random()*100).toFixed(1) + '%;' +
+            'width:' + t + 'px;height:' + t + 'px;' +
+            'animation-delay:' + (Math.random()*6).toFixed(2) + 's;' +
+            'animation-duration:' + (4 + Math.random()*5).toFixed(2) + 's"></span>';
+  }
+  cielo.innerHTML = html;
+})();
+
+const recientes = [];
+let primera = true;
+
+function esDeNoche(){
+  const h = new Date().getHours();
+  return h >= 22 || h < 5;
+}
+
+function disponibles(){
+  return cosas.filter(function(c){
+    if (c.momento === "noche" && !esDeNoche()) return false;
+    return recientes.indexOf(c) === -1;
+  });
+}
+
+function porPalabras(texto, retrasoInicial){
+  return texto.split(" ").map(function(p, n){
+    const d = (retrasoInicial + n * 0.055).toFixed(3);
+    return '<span class="palabra" style="animation-delay:' + d + 's">' + p + '</span>';
+  }).join(" ");
+}
+
+function adorno(){
+  return '<span class="adorno"><i></i><b></b><i></i></span>';
+}
+
+function mostrar(){
+  let opciones = disponibles();
+
+  if (opciones.length === 0){
+    recientes.length = 0;
+    opciones = disponibles();
+  }
+
+  const c = opciones[Math.floor(Math.random() * opciones.length)];
+
+  recientes.push(c);
+  const memoria = Math.max(3, Math.floor(cosas.length / 2));
+  while (recientes.length > memoria) recientes.shift();
+
+  let html = '<div class="bloque">';
+
+  if (c.tipo === "foto"){
+    html += '<span class="etiqueta">' + (c.etiqueta || ajustes.etiquetaFoto) + '</span>';
+    html += adorno();
+    html += '<span class="lienzo"><img src="' + c.archivo + '" alt=""></span>';
+    if (c.pie) html += '<span class="pie-foto">' + c.pie + '</span>';
+  }
+  else if (c.tipo === "nota"){
+    html += '<span class="etiqueta">' + (c.etiqueta || ajustes.etiquetaNota) + '</span>';
+    html += adorno();
+    html += '<p class="nota">' + porPalabras(c.texto, .45) + '</p>';
+    if (ajustes.firma) html += '<span class="firma">' + ajustes.firma + '</span>';
+  }
+  else {
+    html += '<span class="etiqueta">' + (c.etiqueta || ajustes.etiquetaFrase) + '</span>';
+    html += adorno();
+    html += '<p class="frase">' + porPalabras(c.texto, .45) + '</p>';
+  }
+
+  html += '</div>';
+  centro.innerHTML = html;
+
+  if (primera){
+    primera = false;
+  } else {
+    pie.style.opacity = "0";
+  }
+}
+
+document.addEventListener("keydown", function(e){
+  if (e.key === " " || e.key === "Enter") mostrar();
+});
+
+cosas.forEach(function(c){
+  if (c.tipo === "foto"){ new Image().src = c.archivo; }
+});
+
+mostrar();
+</script>
+</body>
+</html>
