@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Feliz cumpleaños, Mariana</title>
+
+<!-- ==========================================================
+     FOTOS QUE NECESITAS (dentro de la carpeta "fotos"):
+       foto1.webp  foto2.webp  foto3.webp
+       foto4.webp  foto5.webp  foto6.webp
+       foto7.webp  foto8.webp  foto9.webp
+     Todo en minúsculas, sin espacios ni acentos.
+
+     PARA EDITAR TEXTOS: busca la palabra EDITA (aparece 2 veces).
+     ========================================================== -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200;0,6..72,300;1,6..72,200;1,6..72,300&family=Josefin+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --fondo:#171020;
+    --fondo2:#241733;
+    --crema:#fdf6ec;
+    --tinta:#2a1f30;
+    --oro:#d3a75a;
+    --coral:#e0674f;
+    --tenue:rgba(253,246,236,.34);
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+
+  body{
+    background:radial-gradient(125% 95% at 50% 8%, var(--fondo2) 0%, var(--fondo) 58%, #0d0812 100%);
+    color:var(--crema);
+    font-family:'Newsreader', Georgia, serif;
+    font-weight:200;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:26px 20px calc(40px + env(safe-area-inset-bottom));
+    overflow:hidden;
+    -webkit-tap-highlight-color:transparent;
+    user-select:none;
+  }
+
+  .capa{ position:fixed; inset:0; pointer-events:none; }
+
+  /* ---------- fondo de 24 ---------- */
+
+  #patron{
+    inset:-22%;
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(84px, 1fr));
+    align-content:start;
+    gap:6px 2px;
+    animation:deriva 34s linear infinite;
+  }
+  #patron span{
+    font-family:'Josefin Sans', sans-serif;
+    font-weight:200;
+    text-align:center;
+    color:var(--oro);
+    line-height:1;
+  }
+  @keyframes deriva{
+    from{ transform:translate3d(0,0,0); }
+    to  { transform:translate3d(-26px,-124px,0); }
+  }
+
+  .vineta{ background:radial-gradient(110% 80% at 50% 45%, transparent 34%, rgba(8,5,12,.86) 100%); }
+
+  .grano{
+    opacity:.05; mix-blend-mode:soft-light;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/></filter><rect width='180' height='180' filter='url(%23n)'/></svg>");
+  }
+
+  /* ---------- confeti ---------- */
+
+  #confeti{ z-index:9; }
+  #confeti i{
+    position:absolute;
+    top:-14px;
+    width:7px; height:11px;
+    border-radius:1px;
+    animation:caer linear forwards;
+  }
+  @keyframes caer{
+    from{ transform:translateY(-10vh) rotate(0deg); opacity:1; }
+    to  { transform:translateY(112vh) rotate(760deg); opacity:0; }
+  }
+
+  /* ---------- escena ---------- */
+
+  .escena{
+    position:relative;
+    width:min(100%, 400px);
+    height:min(86dvh, 720px);
+    z-index:2;
+  }
+
+  /* ---------- portada / sobre ---------- */
+
+  .sobre{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:20px;
+    text-align:center;
+    cursor:pointer;
+    transition:opacity .7s ease, transform .7s cubic-bezier(.4,0,.2,1);
+  }
+  .sobre.fuera{ opacity:0; transform:translateY(-26px) scale(.94); pointer-events:none; }
+
+  .sobre .numero{
+    font-family:'Josefin Sans', sans-serif;
+    font-weight:200;
+    font-size:clamp(120px, 42vw, 190px);
+    line-height:.8;
+    color:var(--crema);
+    letter-spacing:-.04em;
+    text-shadow:0 0 62px rgba(211,167,90,.45);
+  }
+  .sobre .arriba{
+    font-family:'Josefin Sans', sans-serif;
+    font-weight:300;
+    font-size:12px;
+    letter-spacing:.46em; text-indent:.46em;
+    color:var(--oro);
+  }
+  .sobre .nombre{
+    font-size:27px; font-style:italic;
+    color:var(--crema);
+  }
+  .sobre .abrir{
+    margin-top:12px;
+    font-family:'Josefin Sans', sans-serif;
+    font-weight:300;
+    font-size:12px;
+    letter-spacing:.3em; text-indent:.3em;
+    color:var(--tenue);
+    border:1px solid rgba(211,167,90,.42);
+    border-radius:100px;
+    padding:13px 26px;
+    animation:latir 2.6s ease-in-out infinite;
+  }
+  @keyframes latir{
+    0%,100%{ box-shadow:0 0 0 0 rgba(211,167,90,.32); }
+    60%    { box-shadow:0 0 0 16px rgba(211,167,90,0); }
+  }
+
+  /* ---------- baraja ---------- */
+
+  .baraja{
+    position:absolute; inset:0;
+    opacity:0; pointer-events:none;
+    transition:opacity .8s ease .35s;
+  }
+  .baraja.dentro{ opacity:1; pointer-events:auto; }
+
+  .carta{
+    position:absolute;
+    left:50%; top:50%;
+    width:min(88%, 320px);
+    margin-left:min(-44%, -160px);
+    background:var(--crema);
+    color:var(--tinta);
+    border-radius:5px;
+    padding:13px 13px 20px;
+    box-shadow:0 26px 54px rgba(0,0,0,.62);
+    transition:transform .55s cubic-bezier(.3,.7,.3,1), opacity .45s ease;
+    cursor:pointer;
+    will-change:transform;
+  }
+  .carta img{
+    display:block; width:100%;
+    aspect-ratio:4/5;
+    object-fit:cover;
+    border-radius:2px;
+    background:#e6ddd0;
+  }
+  .carta p{
+    font-size:16.5px;
+    font-style:italic;
+    line-height:1.5;
+    text-align:center;
+    padding:16px 6px 0;
+    color:#3a2b40;
+  }
+  .carta .sello{
+    position:absolute; top:24px; right:24px;
+    font-family:'Josefin Sans', sans-serif;
+    font-weight:300;
+    font-size:10px;
+    letter-spacing:.28em; text-indent:.28em;
+    color:var(--coral);
+    background:rgba(253,246,236,.92);
+    padding:5px 9px;
+    border-radius:2px;
+  }
+  .carta.volando{
+    transform:translate(-38vw, -12vh) rotate(-26deg) scale(.9) !important;
+    opacity:0;
+  }
+
+  /* ---------- cierre ---------- */
+
+  .cierre{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    gap:18px; text-align:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .9s ease;
+  }
+  .cierre.dentro{ opacity:1; pointer-events:auto; }
+  .cierre .grande{
+    font-size:clamp(34px, 9.5vw, 46px);
+    line-height:1.15;
+  }
+  .cierre .chico{
+    font-size:17px; font-style:italic;
+    color:var(--tenue);
+    max-width:26ch; line-height:1.62;
+  }
+  .cierre .otra{
+    margin-top:10px;
+    font-family:'Josefin Sans', sans-serif;
+    font-weight:300; font-size:11px;
+    letter-spacing:.28em; text-indent:.28em;
+    color:var(--oro);
+    border:1px solid rgba(211,167,90,.4);
+    border-radius:100px;
+    padding:12px 24px;
+    cursor:pointer;
+  }
+
+  /* ---------- contador ---------- */
+
+  .contador{
+    position:fixed;
+    left:0; right:0;
+    bottom:calc(20px + env(safe-area-inset-bottom));
+    text-align:center;
+    font-family:'Josefin Sans', sans-serif;
+    font-weight:300; font-size:11px;
+    letter-spacing:.3em; text-indent:.3em;
+    color:var(--tenue);
+    opacity:0; transition:opacity .7s ease;
+    z-index:3; pointer-events:none;
+  }
+  .contador.dentro{ opacity:1; }
+
+  @media (prefers-reduced-motion: reduce){
+    #patron,.sobre .abrir,#confeti i{ animation:none; }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="capa" id="patron"></div>
+<div class="capa vineta"></div>
+<div class="capa grano"></div>
+<div class="capa" id="confeti"></div>
+
+<div class="escena">
+
+  <div class="sobre" id="sobre">
+    <p class="arriba" id="txtArriba"></p>
+    <p class="numero">24</p>
+    <p class="nombre" id="txtNombre"></p>
+    <p class="abrir" id="txtAbrir"></p>
+  </div>
+
+  <div class="baraja" id="baraja"></div>
+
+  <div class="cierre" id="cierre">
+    <p class="grande" id="txtGrande"></p>
+    <p class="chico" id="txtChico"></p>
+    <p class="otra" id="txtOtra"></p>
+  </div>
+
+</div>
+
+<p class="contador" id="contador"></p>
+
+<script>
+/* ============================================================
+   EDITA 1 — las cartas: foto + frase.
+   Cambia el orden o las frases como quieras.
+   ============================================================ */
+
+const cartas = [
+  { archivo:"fotos/foto1.webp", frase:"Mi lugar favorito siempre será donde estés tú." },
+  { archivo:"fotos/foto2.webp", frase:"Ojalá la vida nos siga encontrando, una y otra vez, en cada etapa." },
+  { archivo:"fotos/foto3.webp", frase:"Te elegiría incluso en todas las versiones de esta vida que no llegaremos a conocer." },
+  { archivo:"fotos/foto4.webp", frase:"Si nuestra historia fuera un libro, no querría conocer el final; querría seguir leyéndote todos los días." },
+  { archivo:"fotos/foto5.webp", frase:"Entre todas las páginas que me quedan por vivir, espero que muchas incluyan tu nombre." },
+  { archivo:"fotos/foto6.webp", frase:"Hoy cumples 24, pero yo siento que el regalo es para mí por haber coincidido contigo." },
+  { archivo:"fotos/foto7.webp", frase:"Qué bonito poder celebrar otro año de tu vida estando a tu lado." },
+  { archivo:"fotos/foto8.webp", frase:"Tres años después, sigues siendo una de mis partes favoritas de todos mis días." },
+  { archivo:"fotos/foto9.webp", frase:"Feliz cumpleaños, amor." }
+];
+
+/* ============================================================
+   EDITA 2 — los textos de la portada y del final.
+   ============================================================ */
+
+const textos = {
+  arriba:  "hoy cumples",
+  nombre:  "Mariana",
+  abrir:   "abrir",
+  grande:  "Feliz cumpleaños",
+  chico:   "Que tus 24 sean un año lleno de cosas bonitas, sueños cumplidos y momentos que algún día podamos recordar juntos.",
+  otra:    "verlas otra vez",
+  sello:   "toca"
+};
+
+/* ---------- de aquí para abajo no hace falta cambiar nada ---------- */
+
+document.getElementById("txtArriba").textContent = textos.arriba;
+document.getElementById("txtNombre").textContent = textos.nombre;
+document.getElementById("txtAbrir").textContent  = textos.abrir;
+document.getElementById("txtGrande").textContent = textos.grande;
+document.getElementById("txtChico").textContent  = textos.chico;
+document.getElementById("txtOtra").textContent   = textos.otra;
+
+/* fondo de 24 */
+(function(){
+  const p = document.getElementById("patron");
+  let h = "";
+  for (let n = 0; n < 260; n++){
+    const op = (Math.random() * .09 + .03).toFixed(3);
+    const tam = (Math.random() * 26 + 15).toFixed(0);
+    h += '<span style="opacity:' + op + ';font-size:' + tam + 'px">24</span>';
+  }
+  p.innerHTML = h;
+})();
+
+/* confeti */
+function confeti(){
+  const c = document.getElementById("confeti");
+  const colores = ["#d3a75a", "#e0674f", "#fdf6ec", "#b98ec4"];
+  let h = "";
+  for (let n = 0; n < 46; n++){
+    h += '<i style="' +
+         'left:' + (Math.random()*100).toFixed(1) + '%;' +
+         'background:' + colores[Math.floor(Math.random()*colores.length)] + ';' +
+         'animation-duration:' + (2.6 + Math.random()*2.4).toFixed(2) + 's;' +
+         'animation-delay:' + (Math.random()*1.1).toFixed(2) + 's"></i>';
+  }
+  c.innerHTML = h;
+  setTimeout(function(){ c.innerHTML = ""; }, 6200);
+}
+
+/* baraja */
+const baraja = document.getElementById("baraja");
+const contador = document.getElementById("contador");
+const cierre = document.getElementById("cierre");
+let orden = [];
+let bloqueado = false;
+
+cartas.forEach(function(c, n){
+  const el = document.createElement("div");
+  el.className = "carta";
+  el.innerHTML = '<img src="' + c.archivo + '" alt="">' +
+                 '<p>' + c.frase + '</p>' +
+                 (n === 0 ? '<span class="sello">' + textos.sello + '</span>' : '');
+  el.addEventListener("click", pasar);
+  baraja.appendChild(el);
+  orden.push(el);
+  new Image().src = c.archivo;
+});
+
+function acomodar(){
+  orden.forEach(function(el, n){
+    const giro = [-3.5, 2.6, -1.8, 3.2, -2.4][n % 5];
+    const visible = n < 4;
+    el.style.zIndex = 100 - n;
+    el.style.opacity = visible ? 1 : 0;
+    el.style.transform =
+      'translate(0, ' + (-50 + n * 1.6) + '%) ' +
+      'rotate(' + (n === 0 ? giro * .4 : giro) + 'deg) ' +
+      'scale(' + (1 - n * .035) + ')';
+    el.style.pointerEvents = n === 0 ? "auto" : "none";
+  });
+  contador.textContent = (cartas.length - restantes() + 1) + " / " + cartas.length;
+}
+
+let vistas = 0;
+function restantes(){ return cartas.length - vistas; }
+
+function pasar(){
+  if (bloqueado) return;
+  bloqueado = true;
+
+  const sale = orden.shift();
+  sale.classList.add("volando");
+  const sello = sale.querySelector(".sello");
+  if (sello) sello.remove();
+
+  vistas++;
+
+  setTimeout(function(){
+    sale.classList.remove("volando");
+    orden.push(sale);
+    acomodar();
+    bloqueado = false;
+
+    if (vistas >= cartas.length){
+      baraja.classList.remove("dentro");
+      contador.classList.remove("dentro");
+      cierre.classList.add("dentro");
+      confeti();
+    }
+  }, 560);
+
+  acomodar();
+}
+
+document.getElementById("sobre").addEventListener("click", function(){
+  this.classList.add("fuera");
+  baraja.classList.add("dentro");
+  contador.classList.add("dentro");
+  confeti();
+});
+
+document.getElementById("txtOtra").addEventListener("click", function(e){
+  e.stopPropagation();
+  vistas = 0;
+  cierre.classList.remove("dentro");
+  baraja.classList.add("dentro");
+  contador.classList.add("dentro");
+  acomodar();
+});
+
+acomodar();
+</script>
+</body>
+</html>
